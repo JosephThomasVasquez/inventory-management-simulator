@@ -6,10 +6,11 @@
 
 - Node
 - Express
-- CORS
+- postgreSQL
+- Knex
+- cors
 - dotenv
 
 #### Qol
 
 - morgan
-- chalk
