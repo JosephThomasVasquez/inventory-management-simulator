@@ -21,7 +21,7 @@ exports.seed = function (knex) {
           name: "Rabbit String Lights",
           model: "v1",
           description: "Super cute Rabbit lights!",
-          release_date: "2020-11-30",
+          release_date: null,
           price: 19.5,
           quantity_in_stock: 65,
           weight_in_lbs: 2,
