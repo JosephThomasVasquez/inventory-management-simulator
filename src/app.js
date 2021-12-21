@@ -10,4 +10,8 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "You are connected!" });
+});
+
 export default app;
