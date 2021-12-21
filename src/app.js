@@ -1,8 +1,7 @@
-import dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
-import morgan from "morgan";
-import chalk from "chalk";
+const dotenv = require("dotenv");
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
 
 const app = express();
 
@@ -14,4 +13,4 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "You are connected!" });
 });
 
-export default app;
+module.exports = app;
