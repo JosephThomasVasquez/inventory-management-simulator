@@ -1,6 +1,6 @@
 exports.seed = function (knex) {
   // Deletes ALL existing entries
-  return knex("categories")
+  return knex
     .raw("TRUNCATE TABLE categories RESTART IDENTITY CASCADE")
     .then(function () {
       // Inserts seed entries
