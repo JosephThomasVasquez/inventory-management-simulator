@@ -4,4 +4,8 @@ const list = () => {
   return knex("categories").select("*");
 };
 
-module.exports = { list };
+const read = (id) => {
+  return knex("categories").select("*").where({ id });
+};
+
+module.exports = { list, read };
