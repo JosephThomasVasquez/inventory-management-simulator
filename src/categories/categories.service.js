@@ -5,7 +5,6 @@ const list = () => {
 };
 
 const listCategoryItems = (id) => {
-  console.log("id:", id);
   return knex("categories as c")
     .join("items as i", "c.id", "i.category_id")
     .select("i.*")
