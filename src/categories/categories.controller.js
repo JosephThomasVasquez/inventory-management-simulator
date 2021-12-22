@@ -35,6 +35,20 @@ const list = async (req, res, next) => {
   }
 };
 
+// List items in category
+const listCategoryItems = async (req, res, next) => {
+  const category = res.locals.category[0].id;
+  console.log("category id", category);
+
+  try {
+    const data = await categoriesService.listCategoryItems(category);
+    console.log("data", data);
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Get category by id
 const read = async (req, res) => {
   try {
@@ -47,5 +61,6 @@ const read = async (req, res) => {
 
 module.exports = {
   list: asyncErrorBoundary(list),
+  listCategoryItems: [asyncErrorBoundary(categoryExists), listCategoryItems],
   read: [asyncErrorBoundary(categoryExists), read],
 };
