@@ -1,6 +1,6 @@
 exports.up = function (knex) {
   return knex.schema.createTable("categories", (table) => {
-    table.increments("id").primary().unique();
+    table.increments("id").primary();
     table.string("name");
     table.text("description");
     table.timestamps(true, true);
