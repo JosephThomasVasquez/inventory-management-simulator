@@ -55,8 +55,17 @@ const create = async (req, res) => {
   }
 };
 
+const destroy = async (req, res) => {
+  const { item } = res.locals;
+
+  await itemsService.destroy(item[0].id);
+
+  res.sendStatus(204);
+};
+
 module.exports = {
   list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(itemExists), read],
   create: asyncErrorBoundary(create),
+  delete: [asyncErrorBoundary(itemExists), asyncErrorBoundary(destroy)],
 };

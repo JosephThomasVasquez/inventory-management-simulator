@@ -16,4 +16,8 @@ const create = (item) => {
     .then((createdRecords) => createdRecords[0]);
 };
 
-module.exports = { list, read, create };
+const destroy = (id) => {
+  return knex("items").select("*").where({ id }).del();
+};
+
+module.exports = { list, read, create, destroy };
