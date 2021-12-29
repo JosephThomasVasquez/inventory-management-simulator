@@ -45,7 +45,18 @@ const read = async (req, res) => {
   }
 };
 
+// create item
+const create = async (req, res) => {
+  try {
+    const data = await itemsService.create(req.body.data);
+    res.status(201).json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(itemExists), read],
+  create: asyncErrorBoundary(create),
 };

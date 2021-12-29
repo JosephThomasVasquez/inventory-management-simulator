@@ -8,4 +8,12 @@ const read = (id) => {
   return knex("items").select("*").where({ id });
 };
 
-module.exports = { list, read };
+const create = (item) => {
+  console.log("itemData:", item);
+  return knex("items")
+    .insert(item)
+    .returning("*")
+    .then((createdRecords) => createdRecords[0]);
+};
+
+module.exports = { list, read, create };
