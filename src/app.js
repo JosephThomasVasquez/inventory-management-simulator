@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 // Import routes
+const userRouter = require("./user/userLogin.router");
 const homeRouter = require("./home/home.router");
 const categoriesRouter = require("./categories/categories.router");
 const itemsRouter = require("./items/items.router");
@@ -14,8 +15,9 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/users", userRouter);
 app.use("/", homeRouter);
-app.use("/categories", categoriesRouter);
-app.use("/items", itemsRouter);
+app.use("/api/categories", categoriesRouter);
+app.use("/api/items", itemsRouter);
 
 module.exports = app;
