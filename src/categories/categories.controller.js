@@ -59,6 +59,9 @@ const read = async (req, res) => {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  listCategoryItems: [asyncErrorBoundary(categoryExists), listCategoryItems],
+  listCategoryItems: [
+    asyncErrorBoundary(categoryExists),
+    asyncErrorBoundary(listCategoryItems),
+  ],
   read: [asyncErrorBoundary(categoryExists), read],
 };
