@@ -20,7 +20,7 @@ const hasValidProperties = (req, res, next) => {
 
 // VALIDATION / Has password requirements
 const passwordIsValid = (req, res, next) => {
-  const { username, password } = req.body.data;
+  const { password, confirm_password } = req.body.data;
 
   //   Password strength requirements - Strong Password
   const strongPasswordRequirements = {
@@ -44,6 +44,18 @@ const passwordIsValid = (req, res, next) => {
 
   console.log("Entered password:", password);
   res.locals.password = password;
+  res.locals.confirmPassword = confirm_password;
+  next();
+};
+
+const passwordsDoNotMatch = (req, res, next) => {
+  if (res.locals.password !== res.locals.confirmPassword) {
+    return next({
+      status: 400,
+      message: `Passwords do not match.`,
+    });
+  }
+
   next();
 };
 
@@ -158,6 +170,7 @@ module.exports = {
     asyncErrorBoundary(hasValidProperties),
     asyncErrorBoundary(userEmailExists),
     asyncErrorBoundary(passwordIsValid),
+    asyncErrorBoundary(passwordsDoNotMatch),
     asyncErrorBoundary(encryptPassword),
     asyncErrorBoundary(create),
   ],
