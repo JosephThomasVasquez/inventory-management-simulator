@@ -1,5 +1,6 @@
 const users = require("../utils/users_data");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const userLoginService = require("./userLogin.service");
 
 // ==============================================================================================
 // Validation functions =========================================================================
@@ -34,23 +35,51 @@ const userCredentialsIsValid = (req, res, next) => {
 
 const userExists = async (req, res, next) => {
   //   get categoryId from req.params
-  const { itemId } = req.body;
+  const { user_name, email } = req.body;
+  console.log("body", req.body);
 
   // read category from db
-  const item = await itemsService.read(itemId);
+  const user = await userLoginService.read(user_name, email);
+  console.log("user:", user);
 
   // Check if category id is found
-  if (item) {
-    res.locals.item = item;
+  if (user) {
+    console.log("Found user:", user);
+    res.locals.user = user;
     return next();
   }
 
-  next({ status: 404, message: "User cannot be found." });
+  next({ status: 404, message: "Cannot find user." });
 };
 
 // =============================================================================================
 // Resources functions =========================================================================
 // =============================================================================================
+
+const list = async (req, res, next) => {
+  const { search } = req.query;
+  console.log("search:", search);
+
+  let data = null;
+
+  if (search) {
+    data = await userLoginService.searchByUsername(search);
+  } else {
+    data = await userLoginService.list();
+  }
+
+  console.log("data:", data);
+
+  res.json({ data });
+};
+
+const read = async (req, res, next) => {
+  const data = res.locals.user;
+
+  console.log("data:", data);
+
+  res.json({ data });
+};
 
 const login = async (req, res, next) => {
   const { username, password } = req.body.data;
@@ -73,5 +102,7 @@ const login = async (req, res, next) => {
 };
 
 module.exports = {
+  list: asyncErrorBoundary(list),
+  read: [asyncErrorBoundary(userExists), asyncErrorBoundary(read)],
   login: [asyncErrorBoundary(userCredentialsIsValid), login],
 };
