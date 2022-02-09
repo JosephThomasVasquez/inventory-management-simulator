@@ -6,7 +6,19 @@ const userLoginService = require("./userLogin.service");
 // Validation functions =========================================================================
 // ==============================================================================================
 
-const userCredentialsIsValid = (req, res, next) => {
+// VALIDATION / Has request.body
+const hasValidProperties = (req, res, next) => {
+  if (!req.body.data)
+    return next({
+      status: 400,
+      message: `Missing data from the request body.`,
+    });
+
+  next();
+};
+
+// VALIDATION / Has password requirements
+const passwordIsValid = (req, res, next) => {
   const { username, password } = req.body.data;
 
   //   Password strength requirements - Strong Password
@@ -22,15 +34,16 @@ const userCredentialsIsValid = (req, res, next) => {
 
   let isStrongPassword = new RegExp(passwordCheck);
 
-  if (isStrongPassword.test(password)) {
-    console.log("Entered password:", password);
-  } else {
-    console.log("Password is not strong enough");
+  if (!isStrongPassword.test(password)) {
+    return next({
+      status: 400,
+      message: `Password ${password} is not strong enough.`,
+    });
   }
 
-  //   console.log(checkPassword);
+  console.log("Entered password:", password);
 
-  return next();
+  next();
 };
 
 const userExists = async (req, res, next) => {
@@ -56,6 +69,7 @@ const userExists = async (req, res, next) => {
 // Resources functions =========================================================================
 // =============================================================================================
 
+// List Users, Search User by Username
 const list = async (req, res, next) => {
   const { search } = req.query;
   console.log("search:", search);
@@ -81,6 +95,14 @@ const read = async (req, res, next) => {
   res.json({ data });
 };
 
+const create = async (req, res, next) => {
+  const body = req.body.data;
+  console.log("From req.body:", body);
+
+  res.json({ body });
+};
+
+// Login User
 const login = async (req, res, next) => {
   const { username, password } = req.body.data;
   console.log("body", req.body);
@@ -104,5 +126,10 @@ const login = async (req, res, next) => {
 module.exports = {
   list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(userExists), asyncErrorBoundary(read)],
-  login: [asyncErrorBoundary(userCredentialsIsValid), login],
+  create: [
+    asyncErrorBoundary(hasValidProperties),
+    asyncErrorBoundary(passwordIsValid),
+    asyncErrorBoundary(create),
+  ],
+  // login: [asyncErrorBoundary(userCredentialsIsValid), login],
 };
