@@ -1,6 +1,7 @@
 const users = require("../utils/users_data");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const userLoginService = require("./userLogin.service");
+const bcrypt = require("bcryptjs");
 
 // ==============================================================================================
 // Validation functions =========================================================================
@@ -42,18 +43,45 @@ const passwordIsValid = (req, res, next) => {
   }
 
   console.log("Entered password:", password);
+  res.locals.password = password;
+  next();
+};
+
+// Encrypt Password
+const encryptPassword = (req, res, next) => {
+  console.log("got password:", res.locals.password);
+
+  const hashedPassword = bcrypt.hashSync(res.locals.password, 10);
+
+  console.log("hashedPass:", hashedPassword);
+};
+
+const userEmailExists = async (req, res, next) => {
+  const { email } = req.body.data;
+  console.log("body:", email);
+
+  // search for email in database
+  const userEmail = await userLoginService.searchByEmail(email);
+  console.log("Found user:", userEmail);
+
+  if (userEmail) {
+    return next({
+      status: 400,
+      message: `A user with email "${email}" already exists.`,
+    });
+  }
+
+  res.locals.userEmail = userEmail;
 
   next();
 };
 
 const userExists = async (req, res, next) => {
   //   get categoryId from req.params
-  const { user_name, email } = req.body;
-  console.log("body", req.body);
+  const { user_name, email } = req.body.data;
 
   // read category from db
   const user = await userLoginService.read(user_name, email);
-  console.log("user:", user);
 
   // Check if category id is found
   if (user) {
@@ -128,7 +156,9 @@ module.exports = {
   read: [asyncErrorBoundary(userExists), asyncErrorBoundary(read)],
   create: [
     asyncErrorBoundary(hasValidProperties),
+    asyncErrorBoundary(userEmailExists),
     asyncErrorBoundary(passwordIsValid),
+    asyncErrorBoundary(encryptPassword),
     asyncErrorBoundary(create),
   ],
   // login: [asyncErrorBoundary(userCredentialsIsValid), login],

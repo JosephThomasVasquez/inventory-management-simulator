@@ -5,8 +5,12 @@ const list = () => {
 };
 
 const searchByUsername = (user_name) => {
-  const ret = knex("users").select("*").where({ user_name: user_name }).first();
-  console.log("user_name", ret);
+  return knex("users").select("*").where({ user_name: user_name }).first();
+};
+
+const searchByEmail = (email) => {
+  const ret = knex("users").select("*").where({ email: email }).first();
+  console.log("email:", ret);
   return ret;
 };
 
@@ -29,4 +33,11 @@ const destroy = (id) => {
   return knex("users").select("*").where({ id }).del();
 };
 
-module.exports = { list, searchByUsername, read, create, destroy };
+module.exports = {
+  list,
+  searchByUsername,
+  searchByEmail,
+  read,
+  create,
+  destroy,
+};
