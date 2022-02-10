@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const session = require("express-session");
 
 // Error Handling
 const errorHandler = require("./errors/errorHandler");
@@ -18,6 +19,13 @@ const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use("/api/users", userRouter);
 app.use("/", homeRouter);

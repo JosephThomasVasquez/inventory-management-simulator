@@ -49,7 +49,9 @@ const passwordIsValid = (req, res, next) => {
 };
 
 const passwordsDoNotMatch = (req, res, next) => {
-  if (res.locals.password !== res.locals.confirmPassword) {
+  if (res.locals.user.password !== res.locals.user.confirm_password) {
+    console.log("Entered password:", res.locals.user.password);
+    console.log("confirm password:", res.locals.user.confirm_password);
     return next({
       status: 400,
       message: `Passwords do not match.`,
@@ -60,30 +62,40 @@ const passwordsDoNotMatch = (req, res, next) => {
 };
 
 // Encrypt Password
-const encryptPassword = (req, res, next) => {
+const encryptPassword = async (req, res, next) => {
   console.log("got password:", res.locals.password);
 
-  const hashedPassword = bcrypt.hashSync(res.locals.password, 10);
+  const hashedPassword = await bcrypt.hash(res.locals.password, 10);
 
-  console.log("hashedPass:", hashedPassword);
+  if (hashedPassword) {
+    console.log("hashedPass:", hashedPassword);
+
+    res.locals.user.password = hashedPassword;
+    return next();
+  }
+
+  next({
+    status: 400,
+    message: `Error excrypting password.`,
+  });
 };
 
 const userEmailExists = async (req, res, next) => {
-  const { email } = req.body.data;
-  console.log("body:", email);
+  const user = req.body.data;
+  console.log("body:", user.email);
 
   // search for email in database
-  const userEmail = await userLoginService.searchByEmail(email);
-  console.log("Found user:", userEmail);
+  const emailExists = await userLoginService.searchByEmail(user.email);
+  console.log("Found user:", emailExists);
 
-  if (userEmail) {
+  if (emailExists) {
     return next({
       status: 400,
-      message: `A user with email "${email}" already exists.`,
+      message: `A user with email "${user.email}" already exists.`,
     });
   }
 
-  res.locals.userEmail = userEmail;
+  res.locals.user = user;
 
   next();
 };
@@ -136,10 +148,17 @@ const read = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const body = req.body.data;
-  console.log("From req.body:", body);
+  // Remove confirm_password since we do not need to store it.
+  delete res.locals.user.confirm_password;
 
-  res.json({ body });
+  try {
+    const data = await userLoginService.create(res.locals.user);
+    console.log("finalData:", data);
+
+    res.status(201).json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Login User

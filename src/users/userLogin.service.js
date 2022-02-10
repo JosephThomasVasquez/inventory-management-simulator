@@ -23,7 +23,7 @@ const read = (user_name, email) => {
 
 const create = (user) => {
   console.log("userData:", user);
-  return knex("items")
+  return knex("users")
     .insert(user)
     .returning("*")
     .then((createdRecords) => createdRecords[0]);
