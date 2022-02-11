@@ -14,6 +14,12 @@ const searchByEmail = (email) => {
   return ret;
 };
 
+const searchById = (id) => {
+  const ret = knex("users").select("*").where({ id }).first();
+  console.log("email:", ret);
+  return ret;
+};
+
 const read = (user_name, email) => {
   return knex("users")
     .select("*")
@@ -37,6 +43,7 @@ module.exports = {
   list,
   searchByUsername,
   searchByEmail,
+  searchById,
   read,
   create,
   destroy,

@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const session = require("express-session");
+const passport = require("passport");
 
 // Error Handling
 const errorHandler = require("./errors/errorHandler");
@@ -26,6 +27,9 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api/users", userRouter);
 app.use("/", homeRouter);

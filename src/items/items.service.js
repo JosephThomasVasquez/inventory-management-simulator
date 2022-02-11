@@ -5,7 +5,7 @@ const list = () => {
 };
 
 const read = (id) => {
-  return knex("items").select("*").where({ id });
+  return knex("items").select("*").where({ id }).first();
 };
 
 const create = (item) => {

@@ -3,6 +3,56 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const userLoginService = require("./userLogin.service");
 const bcrypt = require("bcryptjs");
 
+// PASSPORT
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+
+const initialize = (passport) => {
+  const authenticateUser = async (email, password, done) => {
+    const emailExists = await userLoginService.searchByEmail(email);
+
+    if (emailExists) {
+      console.log("Found user:", emailExists);
+
+      bcrypt.compare(password, user.password, (error, isMatch) => {
+        if (error) {
+          throw error;
+        }
+
+        if (isMatch) {
+          return done(null, user);
+        } else {
+          return done(null, false, { message: "Incorrect password" });
+        }
+      });
+    } else {
+      return done(null, false, { message: "Email not registered" });
+    }
+  };
+
+  passport.use(
+    new LocalStrategy(
+      { usernameField: "email", passwordField: "password" },
+      authenticateUser
+    )
+  );
+
+  passport.serializeUser((user, done) => done(null, user.id));
+
+  passport.deserializeUser((id, done) => {
+    const getUserById = async (id) => {
+      const userFound = await userLoginService.searchById(id);
+
+      if (userFound) {
+        return done(null, userFound);
+      }
+    };
+    getUserById();
+  });
+};
+
+initialize(passport);
+
 // ==============================================================================================
 // Validation functions =========================================================================
 // ==============================================================================================
@@ -161,25 +211,19 @@ const create = async (req, res, next) => {
   }
 };
 
+const checkPassport = async (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/login",
+  });
+};
+
 // Login User
 const login = async (req, res, next) => {
   const { username, password } = req.body.data;
   console.log("body", req.body);
 
-  try {
-    const user = await users.find(
-      (user) => username === user.username && password === user.password
-    );
-    console.log(user);
-
-    if (user) {
-      res.status(200).json({ data: user });
-    } else {
-      next({ status: 403, message: "User not found" });
-    }
-  } catch (error) {
-    next(error);
-  }
+  next({ status: 403, message: "User not found" });
 };
 
 module.exports = {
@@ -193,5 +237,5 @@ module.exports = {
     asyncErrorBoundary(encryptPassword),
     asyncErrorBoundary(create),
   ],
-  // login: [asyncErrorBoundary(userCredentialsIsValid), login],
+  login: [asyncErrorBoundary(checkPassport), asyncErrorBoundary(login)],
 };

@@ -9,6 +9,8 @@ const itemExists = async (req, res, next) => {
   //   get categoryId from req.params
   const { itemId } = req.params;
 
+  console.log(itemId);
+
   // read category from db
   const item = await itemsService.read(itemId);
 
@@ -46,7 +48,7 @@ const read = async (req, res) => {
 };
 
 // create item
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   try {
     const data = await itemsService.create(req.body.data);
     res.status(201).json({ data });
