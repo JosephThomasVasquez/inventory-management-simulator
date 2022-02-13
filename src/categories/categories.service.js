@@ -15,4 +15,12 @@ const read = (id) => {
   return knex("categories").select("*").where({ id });
 };
 
-module.exports = { list, read, listCategoryItems };
+const create = (category) => {
+  console.log("categoryData:", category);
+  return knex("categories")
+    .insert(category)
+    .returning("*")
+    .then((createdRecords) => createdRecords[0]);
+};
+
+module.exports = { list, listCategoryItems, read, create };

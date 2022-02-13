@@ -21,6 +21,37 @@ const categoryExists = async (req, res, next) => {
   next({ status: 404, message: "Category cannot be found." });
 };
 
+// Has req.body data
+const hasValidProperties = (req, res, next) => {
+  if (!req.body.data)
+    return next({
+      status: 400,
+      message: `Missing data from the request body.`,
+    });
+
+  next();
+};
+
+const hasValidFormData = (req, res, next) => {
+  const { name = {}, description = {} } = req.body.data;
+
+  if (name.length < 2) {
+    return next({
+      status: 400,
+      message: `Name must contain 2 or more characters.`,
+    });
+  }
+
+  if (description.length < 2) {
+    return next({
+      status: 400,
+      message: `Description must contain 2 or more characters.`,
+    });
+  }
+
+  next();
+};
+
 // =============================================================================================
 // Resources functions =========================================================================
 // =============================================================================================
@@ -57,6 +88,16 @@ const read = async (req, res) => {
   }
 };
 
+const create = async (req, res, next) => {
+  try {
+    const data = await categoriesService.create(req.body.data);
+
+    res.status(201).json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   list: asyncErrorBoundary(list),
   listCategoryItems: [
@@ -64,4 +105,9 @@ module.exports = {
     asyncErrorBoundary(listCategoryItems),
   ],
   read: [asyncErrorBoundary(categoryExists), read],
+  create: [
+    asyncErrorBoundary(hasValidProperties),
+    asyncErrorBoundary(hasValidFormData),
+    asyncErrorBoundary(create),
+  ],
 };
