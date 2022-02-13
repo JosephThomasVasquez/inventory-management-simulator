@@ -57,6 +57,16 @@ const create = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  const { id } = res.locals.item;
+
+  const updatedItem = { ...req.body.data, id };
+
+  const data = await itemsService.update(updatedItem);
+
+  res.json({ data });
+};
+
 const destroy = async (req, res) => {
   const { item } = res.locals;
 
@@ -69,5 +79,6 @@ module.exports = {
   list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(itemExists), read],
   create: asyncErrorBoundary(create),
+  update: [asyncErrorBoundary(itemExists), asyncErrorBoundary(update)],
   delete: [asyncErrorBoundary(itemExists), asyncErrorBoundary(destroy)],
 };
