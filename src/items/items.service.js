@@ -4,6 +4,14 @@ const list = () => {
   return knex("items").select("*");
 };
 
+const searchItem = (searchTerm) => {
+  console.log("searchTerm for knex", searchTerm);
+  return knex("items")
+    .select("*")
+    .whereRaw(`name`, "like", `%${searchTerm}%`)
+    .orderBy("name", "desc");
+};
+
 const read = (id) => {
   return knex("items").select("*").where({ id }).first();
 };
@@ -28,4 +36,4 @@ const destroy = (id) => {
   return knex("items").select("*").where({ id }).del();
 };
 
-module.exports = { list, read, create, update, destroy };
+module.exports = { list, read, create, update, searchItem, destroy };

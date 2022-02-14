@@ -37,6 +37,24 @@ const list = async (req, res, next) => {
   }
 };
 
+const search = async (req, res, next) => {
+  const searchTerm = req.query;
+  console.log("req.query", req.query);
+
+  let data = null;
+
+  try {
+    if (searchTerm) {
+      data = await itemsService.searchItem(searchTerm);
+    } else {
+      data = await itemsService.list();
+    }
+  } catch (error) {
+    next(error);
+  }
+  res.json({ data });
+};
+
 // Get category by id
 const read = async (req, res) => {
   try {
@@ -81,4 +99,5 @@ module.exports = {
   create: asyncErrorBoundary(create),
   update: [asyncErrorBoundary(itemExists), asyncErrorBoundary(update)],
   delete: [asyncErrorBoundary(itemExists), asyncErrorBoundary(destroy)],
+  search: asyncErrorBoundary(search),
 };
