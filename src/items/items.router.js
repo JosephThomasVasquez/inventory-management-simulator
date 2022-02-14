@@ -15,6 +15,6 @@ router
   .delete(controller.delete)
   .all(methodNotAllowed);
 
-router.route("/search").get(controller.search).all(methodNotAllowed);
+// router.route("/search").get(controller.search).all(methodNotAllowed);
 
 module.exports = router;
