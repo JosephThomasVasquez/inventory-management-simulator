@@ -1,7 +1,7 @@
 const knex = require("../db/connection");
 
 const list = () => {
-  return knex("categories").select("*");
+  return knex("categories").select("*").orderBy("name", "asc");
 };
 
 const listCategoryItems = (id) => {
