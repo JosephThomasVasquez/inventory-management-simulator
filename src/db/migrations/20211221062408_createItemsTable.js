@@ -9,6 +9,11 @@ exports.up = function (knex) {
     table.decimal("price");
     table.integer("quantity_in_stock");
     table.decimal("weight_in_lbs");
+    table
+      .string("main_imageUrl")
+      .defaultTo(
+        "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6443/6443301_sd.jpg"
+      );
     // link to category id as category_id from categories table
     table.integer("category_id").unsigned().notNullable();
     table

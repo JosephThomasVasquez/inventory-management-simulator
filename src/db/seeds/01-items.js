@@ -63,6 +63,17 @@ exports.seed = function (knex) {
           weight_in_lbs: 1,
           category_id: 3,
         },
+        {
+          sku: "A2482",
+          name: "iPhone 13 mini 128GB (Blue)",
+          model: "MLMT3LL/A",
+          description: "The all new 2021 iPhone 13 mini",
+          release_date: "2021-09-24",
+          price: 699.99,
+          quantity_in_stock: 2000,
+          weight_in_lbs: 0.310625,
+          category_id: 1,
+        },
       ]);
     });
 };
