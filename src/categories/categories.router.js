@@ -7,7 +7,11 @@ router
   .get(controller.listCategoryItems)
   .all(methodNotAllowed);
 
-router.route("/:categoryId").get(controller.read).all(methodNotAllowed);
+router
+  .route("/:categoryId")
+  .get(controller.read)
+  .put(controller.update)
+  .all(methodNotAllowed);
 
 router
   .route("/")

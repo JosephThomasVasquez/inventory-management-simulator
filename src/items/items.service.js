@@ -1,7 +1,7 @@
 const knex = require("../db/connection");
 
 const list = () => {
-  return knex("items").select("*");
+  return knex("items").select("*").orderBy("quantity_in_stock", "desc");
 };
 
 const searchItem = (searchTerm) => {

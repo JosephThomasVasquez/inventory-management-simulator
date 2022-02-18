@@ -23,4 +23,13 @@ const create = (category) => {
     .then((createdRecords) => createdRecords[0]);
 };
 
-module.exports = { list, listCategoryItems, read, create };
+const update = (updatedCategory) => {
+  console.log("updated:", updatedCategory);
+  return knex("categories")
+    .select("*")
+    .where({ id: updatedCategory.id })
+    .update(updatedCategory, "*")
+    .then((updatedRecords) => updatedRecords[0]);
+};
+
+module.exports = { list, listCategoryItems, read, create, update };
