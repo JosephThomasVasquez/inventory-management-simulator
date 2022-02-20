@@ -101,9 +101,6 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   const { id } = res.locals.category[0];
 
-  console.log("body:", req.body.data);
-  // console.log("locals:", res.locals.category);
-
   const updatedCategory = { ...req.body.data, id };
 
   const data = await categoriesService.update(updatedCategory);

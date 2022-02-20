@@ -83,6 +83,8 @@ const update = async (req, res, next) => {
 
   const data = await itemsService.update(updatedItem);
 
+  console.log("Updated DATA: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", data);
+
   res.json({ data });
 };
 

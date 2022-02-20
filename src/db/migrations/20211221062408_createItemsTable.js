@@ -14,6 +14,7 @@ exports.up = function (knex) {
       .defaultTo(
         "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6443/6443301_sd.jpg"
       );
+    table.specificType("images_array", "text ARRAY");
     // link to category id as category_id from categories table
     table.integer("category_id").unsigned().notNullable();
     table

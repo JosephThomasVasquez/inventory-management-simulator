@@ -19,6 +19,15 @@ exports.seed = function (knex) {
           description:
             "Drills, saws, cutters, gauges, rulers, and measurement.",
         },
+        {
+          name: "Gaming",
+          description:
+            "All gaming console, games, accessories, and gaming related content.",
+        },
+        {
+          name: "Office Supplies",
+          description: "List of all Office Supplies.",
+        },
       ]);
     });
 };
