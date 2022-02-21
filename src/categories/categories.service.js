@@ -8,7 +8,8 @@ const listCategoryItems = (id) => {
   return knex("categories as c")
     .join("items as i", "c.id", "i.category_id")
     .select("i.*")
-    .where({ category_id: id });
+    .where({ category_id: id })
+    .orderBy("name", "asc");
 };
 
 const read = (id) => {

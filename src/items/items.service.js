@@ -45,4 +45,11 @@ const destroy = (id) => {
   return knex("items").select("*").where({ id }).del();
 };
 
-module.exports = { list, read, create, update, searchItem, destroy };
+module.exports = {
+  list,
+  read,
+  create,
+  update,
+  searchItem,
+  destroy,
+};
