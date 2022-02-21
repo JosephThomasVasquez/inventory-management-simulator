@@ -34,19 +34,11 @@ const create = (item) => {
 
 const update = (updatedItem) => {
   console.log("updatedItem:", updatedItem);
-
-  let image = updatedItem.main_imageUrl;
-
   return knex("items")
     .select("*")
     .where({ id: updatedItem.id })
     .update(updatedItem, "*")
-    .then(() => {
-      return knex("item_images")
-        .where({ item_id: updatedItem.id })
-        .update({ images: JSON.stringify(["image1", "image2"]) })
-        .returning((updatedRecords) => updatedRecords[0]);
-    });
+    .then((updatedRecords) => updatedRecords[0]);
 };
 
 const destroy = (id) => {
