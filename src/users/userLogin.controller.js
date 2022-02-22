@@ -2,56 +2,8 @@ const users = require("../utils/users_data");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const userLoginService = require("./userLogin.service");
 const bcrypt = require("bcryptjs");
-
-// PASSPORT
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-
-const initialize = (passport) => {
-  const authenticateUser = async (email, password, done) => {
-    const emailExists = await userLoginService.searchByEmail(email);
-
-    if (emailExists) {
-      console.log("Found user:", emailExists);
-
-      bcrypt.compare(password, user.password, (error, isMatch) => {
-        if (error) {
-          throw error;
-        }
-
-        if (isMatch) {
-          return done(null, user);
-        } else {
-          return done(null, false, { message: "Incorrect password" });
-        }
-      });
-    } else {
-      return done(null, false, { message: "Email not registered" });
-    }
-  };
-
-  passport.use(
-    new LocalStrategy(
-      { usernameField: "email", passwordField: "password" },
-      authenticateUser
-    )
-  );
-
-  passport.serializeUser((user, done) => done(null, user.id));
-
-  passport.deserializeUser((id, done) => {
-    const getUserById = async (id) => {
-      const userFound = await userLoginService.searchById(id);
-
-      if (userFound) {
-        return done(null, userFound);
-      }
-    };
-    getUserById();
-  });
-};
-
-initialize(passport);
+const { response } = require("../app");
 
 // ==============================================================================================
 // Validation functions =========================================================================
@@ -152,10 +104,10 @@ const userEmailExists = async (req, res, next) => {
 
 const userExists = async (req, res, next) => {
   //   get categoryId from req.params
-  const { user_name, email } = req.body.data;
+  const { email } = req.body.data;
 
   // read category from db
-  const user = await userLoginService.read(user_name, email);
+  const user = await userLoginService.read(email);
 
   // Check if category id is found
   if (user) {
@@ -212,18 +164,26 @@ const create = async (req, res, next) => {
 };
 
 const checkPassport = async (req, res, next) => {
-  passport.authenticate("local", {
+  console.log("Checking Passport");
+  const auth = await passport.authenticate("local", {
     successRedirect: "/dashboard",
     failureRedirect: "/login",
   });
+
+  console.log("auth:", auth);
+
+  res.send({ data: { auth, message: "Successfully authenticated" } });
 };
+
+const isAuthenticated = (req, res, next) => {};
 
 // Login User
 const login = async (req, res, next) => {
   const { username, password } = req.body.data;
-  console.log("body", req.body);
+  console.log("res.locals.user:", req.locals.user);
+  console.log("body:", req.body.data);
 
-  next({ status: 403, message: "User not found" });
+  // next({ status: 403, message: "User not found" });
 };
 
 module.exports = {
@@ -237,5 +197,5 @@ module.exports = {
     asyncErrorBoundary(encryptPassword),
     asyncErrorBoundary(create),
   ],
-  login: [asyncErrorBoundary(checkPassport), asyncErrorBoundary(login)],
+  login: [asyncErrorBoundary(checkPassport)],
 };

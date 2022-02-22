@@ -16,15 +16,12 @@ const searchByEmail = (email) => {
 
 const searchById = (id) => {
   const ret = knex("users").select("*").where({ id }).first();
-  console.log("email:", ret);
+  console.log("id:", ret);
   return ret;
 };
 
-const read = (user_name, email) => {
-  return knex("users")
-    .select("*")
-    .where("user_name", user_name)
-    .orWhere("email", email);
+const read = (email) => {
+  return knex("users").select("*").where({ email: email });
 };
 
 const create = (user) => {

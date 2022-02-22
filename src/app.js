@@ -4,6 +4,8 @@ const cors = require("cors");
 const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
+const passportLocal = require("passport-local").Strategy;
+const initializePassport = require("./utils/passportConfig");
 
 // Error Handling
 const errorHandler = require("./errors/errorHandler");
@@ -19,8 +21,17 @@ const searchRouter = require("./search/search.router");
 const app = express();
 
 app.use(morgan("dev"));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET, POST, PUT, DELETE",
+    credentials: true,
+  })
+);
 app.use(express.json());
+
+initializePassport(passport);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
