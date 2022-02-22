@@ -30,6 +30,7 @@ app.use(
 );
 app.use(express.json());
 
+// Remove
 initializePassport(passport);
 
 app.use(
