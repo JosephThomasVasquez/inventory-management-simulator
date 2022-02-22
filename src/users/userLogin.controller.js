@@ -1,4 +1,3 @@
-const users = require("../utils/users_data");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const userLoginService = require("./userLogin.service");
 const bcrypt = require("bcryptjs");
