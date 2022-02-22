@@ -23,7 +23,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://inventory-manager-backend.herokuapp.com",
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
   })
