@@ -23,7 +23,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "https://inventory-manager-backend.herokuapp.com",
+    origin: "https://inventory-manager-client.vercel.app",
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
   })
