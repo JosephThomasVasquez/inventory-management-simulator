@@ -20,10 +20,12 @@ const searchRouter = require("./search/search.router");
 
 const app = express();
 
+const clientApp = "https://inventory-manager-client.vercel.app";
+
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "https://inventory-manager-client.vercel.app",
+    origin: "http://localhost:3000",
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
   })
@@ -31,21 +33,21 @@ app.use(
 app.use(express.json());
 
 // Remove
-initializePassport(passport);
+// initializePassport(passport);
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-app.use("/api/users", userRouter);
 app.use("/", homeRouter);
+app.use("/api/users", userRouter);
 app.use("/api/categories", categoriesRouter);
 app.use("/api/items", itemsRouter);
 app.use("/api/search", searchRouter);

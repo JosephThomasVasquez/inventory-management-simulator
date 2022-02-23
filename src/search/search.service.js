@@ -4,7 +4,7 @@ const searchItem = (searchTerm) => {
   console.log("searchTerm for knex", searchTerm);
   return knex("items")
     .select("*")
-    .where(`name`, "like", `${searchTerm}%`)
+    .whereRaw(`name ILIKE ?`, [`${searchTerm}%`])
     .orderBy("name", "desc");
 };
 

@@ -8,14 +8,14 @@ const searchItem = (searchTerm) => {
   console.log("searchTerm for knex", searchTerm);
   return knex("items")
     .select("*")
-    .whereRaw(
-      `name`,
-      "like",
+    .whereILike(
+      "name",
+      "ilike",
       `%${searchTerm}%`,
       "or",
       "name",
       "like",
-      `"%${searchTerm}%"`
+      `%${searchTerm}%`
     )
     .orderBy("name", "desc");
 };

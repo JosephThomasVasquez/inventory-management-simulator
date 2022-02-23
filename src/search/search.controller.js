@@ -11,13 +11,12 @@ const search = async (req, res, next) => {
   try {
     if (searchTerm) {
       data = await searchService.searchItem(searchTerm);
-    } else {
-      data = await searchService.list();
+      console.log("search?:", data);
+      res.json({ data });
     }
   } catch (error) {
-    next(error);
+    console.log(error);
   }
-  res.json({ data });
 };
 
 module.exports = { searchItems: asyncErrorBoundary(search) };
