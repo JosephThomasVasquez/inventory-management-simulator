@@ -21,7 +21,7 @@ const searchById = (id) => {
 };
 
 const read = (email) => {
-  return knex("users").select("*").where({ email: email });
+  return knex("users").select("*").where({ email: email }).first();
 };
 
 const create = (user) => {

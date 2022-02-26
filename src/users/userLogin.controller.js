@@ -1,6 +1,7 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const userLoginService = require("./userLogin.service");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const passport = require("passport");
 
 // ==============================================================================================
@@ -117,6 +118,54 @@ const userExists = async (req, res, next) => {
   next({ status: 404, message: "Cannot find user." });
 };
 
+// User Password Encryption Validation
+const passwordIsMatch = async (req, res, next) => {
+  const { password } = req.body.data;
+  // console.log("password", password);
+  // console.log("res.locals.user.password:", res.locals.user.password);
+
+  try {
+    if (!password || password === "") throw new Error("Invalid password");
+
+    const hashedPassword = await bcrypt.hash(res.locals.user.password, 10);
+    console.log("hashed", hashedPassword);
+
+    bcrypt.compare(
+      password,
+      res.locals.user.password,
+      (error, confirmIsMatch) => {
+        console.log("confirmed:", confirmIsMatch);
+
+        if (error) {
+          throw error;
+        }
+
+        if (confirmIsMatch) {
+          return next();
+        }
+      }
+    );
+  } catch (error) {
+    console.log("error:", error);
+  }
+};
+
+// Generate Token
+const generateToken = (req, res, next) => {
+  const secret = process.env.JWT_SECRET;
+
+  const token = jwt.sign({ id: res.locals.user.id }, secret, {
+    expiresIn: "1d",
+  });
+
+  if (token) {
+    res.locals.user.token = token;
+    return next();
+  }
+
+  next({ status: 400, message: "Error authenticating User." });
+};
+
 // =============================================================================================
 // Resources functions =========================================================================
 // =============================================================================================
@@ -177,11 +226,20 @@ const isAuthenticated = (req, res, next) => {};
 
 // Login User
 const login = async (req, res, next) => {
-  const { username, password } = req.body.data;
-  console.log("res.locals.user:", req.locals.user);
-  console.log("body:", req.body.data);
+  // const { username, password } = req.body.data;
+  // console.log("res.locals.user:", res.locals.user);
+  // console.log("body:", req.body.data);
 
-  // next({ status: 403, message: "User not found" });
+  const data = {
+    first_name: res.locals.user.first_name,
+    last_name: res.locals.user.last_name,
+    user_name: res.locals.user.user_name,
+    password: res.locals.user.password,
+    email: res.locals.user.email,
+    token: res.locals.user.token,
+  };
+
+  res.send({ data });
 };
 
 module.exports = {
@@ -195,5 +253,10 @@ module.exports = {
     asyncErrorBoundary(encryptPassword),
     asyncErrorBoundary(create),
   ],
-  login: [asyncErrorBoundary(checkPassport)],
+  login: [
+    asyncErrorBoundary(userExists),
+    asyncErrorBoundary(passwordIsMatch),
+    asyncErrorBoundary(generateToken),
+    asyncErrorBoundary(login),
+  ],
 };
