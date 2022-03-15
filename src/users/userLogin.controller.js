@@ -154,9 +154,13 @@ const passwordIsMatch = async (req, res, next) => {
 const generateToken = (req, res, next) => {
   const secret = process.env.JWT_SECRET;
 
-  const token = jwt.sign({ id: res.locals.user.id }, secret, {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    { id: res.locals.user.id, username: res.locals.user.user_name },
+    secret,
+    {
+      expiresIn: "1h",
+    }
+  );
 
   if (token) {
     res.locals.user.token = token;
@@ -229,17 +233,18 @@ const login = async (req, res, next) => {
   // const { username, password } = req.body.data;
   // console.log("res.locals.user:", res.locals.user);
   // console.log("body:", req.body.data);
+  console.log(`Successfully Signed in as ${res.locals.user.email}!`);
 
   const data = {
     first_name: res.locals.user.first_name,
     last_name: res.locals.user.last_name,
     user_name: res.locals.user.user_name,
-    password: res.locals.user.password,
     email: res.locals.user.email,
     token: res.locals.user.token,
+    is_admin: res.locals.user.is_admin,
   };
 
-  res.send({ data });
+  res.json({ data });
 };
 
 module.exports = {
