@@ -25,7 +25,7 @@ const clientApp = "https://inventory-manager-client.vercel.app";
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: clientApp,
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
   })
