@@ -75,6 +75,8 @@ exports.seed = function (knex) {
           quantity_in_stock: 2000,
           weight_in_lbs: 0.310625,
           category_id: 1,
+          main_imageUrl:
+            "https://www.protocol.com/media-library/the-apple-iphone-13.jpg?id=27471238&width=1245&quality=85&coordinates=0%2C101%2C0%2C102&height=700",
           image_1:
             "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-pink-select-2021?wid=940&hei=1112&fmt=png-alpha&.v=1629842709000",
           image_2:
@@ -85,6 +87,28 @@ exports.seed = function (knex) {
             "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-starlight-select-2021?wid=940&hei=1112&fmt=png-alpha&.v=1629907845000",
           image_5:
             "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-product-red-select-2021?wid=940&hei=1112&fmt=png-alpha&.v=1629907846000",
+        },
+        {
+          sku: "",
+          name: "Apple AirPods (3rd generation)",
+          model: "",
+          description:
+            "All-new design\nAirPods are lightweight and offer a contoured design. They sit at just the right angle for comfort and to better direct audio to your ear. The stem is 33 percent shorter than AirPods (2nd generation) and includes a force sensor to easily control music and calls.\n\nSpatial audio with dynamic head tracking\nSound is placed all around you to create an immersive, three-dimensional listening experience for music, TV shows, and movies. Gyroscopes and accelerometers in AirPods work together to track your head movements — so it sounds like you’re in the center of songs and scenes.¹\n\nAdaptive EQ\nMusic is automatically tuned to suit the shape of your ear. Inward-facing microphones detect what you’re hearing, then adjust low- and mid-range frequencies to deliver the rich details in every song.\n\nLonger battery life\nAirPods have an extra hour of battery life compared with AirPods (2nd generation) for up to 6 hours of listening time² and up to 4 hours of talk time.⁵ With just 5 minutes of charge, you’ll get around an hour of listening⁶ or talk time.⁷ And with the MagSafe Charging Case, you can enjoy up to 30 hours of total listening time and charge with compatible MagSafe and wireless chargers.⁸\n\nSweat and water resistant\nBoth AirPods and the MagSafe Charging Case are rated IPX4 water resistant — so they’ll withstand anything from rain to heavy workouts.³\n\nMagical in every way\nSetup is effortless — pull them out of the case and they’re ready to use. Automatically switch between your Apple devices. In-ear detection knows the difference between your ear and other surfaces. Announce Notifications with Siri gives you the option to have Siri read your notifications through your AirPods. And with Audio Sharing, you and a friend can easily share a song or show between any two sets of AirPods.⁴",
+          release_date: "2021-10-26T07:00:00.000Z",
+          price: "179.00",
+          quantity_in_stock: 1600,
+          weight_in_lbs: "0.09",
+          main_imageUrl:
+            "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MME73_AV2?wid=1144&hei=1144&fmt=jpeg&qlt=80&.v=1632861338000",
+          image_1:
+            "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MME73?wid=1144&hei=1144&fmt=jpeg&qlt=80&.v=1632861342000",
+          image_2:
+            "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MME73_AV1?wid=1144&hei=1144&fmt=jpeg&qlt=80&.v=1632861333000",
+          image_3:
+            "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MME73_AV3?wid=1144&hei=1144&fmt=jpeg&qlt=80&.v=1632861336000",
+          image_4: "",
+          image_5: "",
+          category_id: 1,
         },
         {
           sku: "",

@@ -7,6 +7,7 @@ exports.up = function (knex) {
     table.string("password").notNullable();
     table.string("email").notNullable().unique();
     table.string("token");
+    table.string("role").defaultTo("user");
     table.boolean("is_admin").defaultTo(false);
     table.timestamps(true, true);
   });

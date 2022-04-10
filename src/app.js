@@ -20,6 +20,7 @@ const searchRouter = require("./search/search.router");
 
 const app = express();
 
+// Change CORS origin to clientApp for deployment to heroku then use > git push heroku main
 const clientApp = "https://inventory-manager-client.vercel.app";
 
 app.use(morgan("dev"));
