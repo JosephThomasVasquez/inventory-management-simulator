@@ -9,7 +9,7 @@ const searchItem = (searchTerm) => {
 
   return knex("items")
     .select("*")
-    .whereRaw(`name ILIKE ?`, [`${splitTerms[0]}%`])
+    .whereRaw(`name ILIKE ?`, [`%${splitTerms[0]}%`])
     .orderBy("name", "desc");
 };
 
