@@ -22,6 +22,7 @@ const app = express();
 
 // Change CORS origin to clientApp for deployment to heroku then use > git push heroku main
 const clientApp = "https://inventory-manager-client.vercel.app";
+// const clientApp = "http://localhost:3000";
 
 app.use(morgan("dev"));
 app.use(
