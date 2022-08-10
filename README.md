@@ -1,6 +1,10 @@
 # Inventory Management Simulator
 
-## An app to keep inventory of items and descriptions
+## Backend for the Inventory Manager App
+
+### Front-End repo is [here](https://github.com/JosephThomasVasquez/inventory-management-frontend)
+
+<hr>
 
 ### Stack
 
